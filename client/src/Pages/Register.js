@@ -44,7 +44,7 @@ function Register({ show, setShow, setShowLogin }) {
                     role: "",
                 })
 
-                const timer = setTimeout(navigates, 3000);
+                const timer = setTimeout(navigates, 1000);
 
                 function navigates() {
                     setShow(false);

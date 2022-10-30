@@ -4,12 +4,13 @@ import { Container, Navbar, Nav } from 'react-bootstrap';
 import Login from '../Pages/Login';
 import Register from '../Pages/Register';
 import GlobalButton from './Atoms/Global-button';
-import { Link } from 'react-router-dom';
-import { LoginContext } from '../context/DataContext';
+import { Link, useParams } from 'react-router-dom';
 import { CounterContext } from '../context/Data-counter'
 import Image from '../Assets/Image/User/orang.png';
 import * as Icon from "react-icons/fa";
 import { UserContext } from '../context/User-context';
+import { useMutation, useQuery } from 'react-query';
+import { API } from '../config/Api';
 
 function Header() {
     const [showLogin, setShowLogin] = useState(false);
@@ -23,7 +24,6 @@ function Header() {
         });
         setShowLogin(true);
     }
-
     return (
         <>
             <Navbar expand="lg" sticky="top" className="navbar" >
@@ -59,6 +59,7 @@ function Header() {
                                     <ul className="dropdown-menu" style={{ marginLeft: "-50px" }}>
                                         <li><Link className="dropdown-item" to={`/Profile/${state?.user.id}`} ><Icon.FaUserAlt className='me-2' /> Profile Partner</Link></li>
                                         <li><Link className="dropdown-item" to="/AddProduct"><Icon.FaHamburger className='me-2' /> Add Product</Link> </li>
+                                        <li><Link className="dropdown-item" to="/ListProduct"><Icon.FaListAlt className='me-2' /> List Product</Link> </li>
                                         <li className='dropdown-item' onClick={Logout} style={{ cursor: "pointer" }} ><Icon.FaSignOutAlt className='me-2' /> Logout</li>
                                     </ul>
                                 </div>

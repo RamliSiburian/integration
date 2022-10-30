@@ -4,7 +4,7 @@ import GlobalForm from '../Components/Atoms/Global-form';
 import * as Icon from 'react-icons/fa';
 import { useMutation, useQuery } from 'react-query';
 import { API } from '../config/Api';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function AddProduk() {
     const title = "Add Product"
@@ -66,10 +66,10 @@ function AddProduk() {
                     qty: 0,
                 })
 
-                const timer = setTimeout(navigates, 3000);
+                const timer = setTimeout(navigates, 1000);
 
                 function navigates() {
-                    navigate("/DetailResto")
+                    navigate("/ListProduct");
                 }
 
 
@@ -90,7 +90,10 @@ function AddProduk() {
         <>
             <Container>
                 <div className="add-produk mt-5">
-                    <p className='fs-3 fw-bold'>Add Produk</p>
+                    <div className="d-md-flex align-items-center">
+                        <p className="fs-5 fw-bold me-3"><Link to={"/ListProduct"} className="text-danger"><Icon.FaArrowLeft /> Back |</Link> </p>
+                        <p className='fs-3 fw-bold'>Add Produk</p>
+                    </div>
                     <hr />
                     {message && message}
                     <Form onSubmit={(e) => handleOnSubmit.mutate(e)}>

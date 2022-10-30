@@ -1,22 +1,51 @@
-import React, { useContext } from 'react'
-import { Container, Table } from 'react-bootstrap';
+import React, { useContext, useEffect, useState } from 'react'
+import { Button, Container, Table } from 'react-bootstrap';
 import * as Icon from "react-icons/fa";
-import { useQuery } from 'react-query';
-import { Link } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
+import { Link, useNavigate } from 'react-router-dom';
 import { API } from '../config/Api';
 import imgEmpty from '../Assets/Image/empty.png';
 import rupiah from 'rupiah-format';
 import { UserContext } from '../context/User-context';
+import DeleteData from "../Components/Modal/Delete-product";
+
 function Product() {
+    const navigate = useNavigate();
     const [state, dispatch] = useContext(UserContext);
+    const [idDelete, setIdDelete] = useState(null);
+    const [confirmDelete, setConfirmDelete] = useState(null);
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const user_id = state.user.id
 
-    let { data: productList } = useQuery("productListCache", async () => {
+    let { data: productList, refetch } = useQuery("productListCache", async () => {
         const response = await API.get("/product/" + user_id);
         return response.data.data;
     })
-    console.log(productList);
+
+    const handleDelete = (id) => {
+        setIdDelete(id);
+        handleShow();
+    };
+
+    const deleteById = useMutation(async (id) => {
+        try {
+            await API.delete(`/product/${id}`);
+            refetch();
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    useEffect(() => {
+        if (confirmDelete) {
+            handleClose();
+            deleteById.mutate(idDelete);
+            setConfirmDelete(null);
+        }
+    }, [confirmDelete]);
 
 
     return (
@@ -38,6 +67,7 @@ function Product() {
                                     <th>Description</th>
                                     <th>price</th>
                                     <th>Quantity</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -63,6 +93,26 @@ function Product() {
                                             {rupiah.convert(item?.price)}
                                         </td>
                                         <td className="align-middle">{item?.qty}</td>
+                                        <td className="align-middle">
+                                            <Button
+                                                onClick={() => {
+                                                    navigate("/EditProduct");
+                                                }}
+                                                className="btn-sm btn-success me-2"
+                                                style={{ minWidth: "75px" }}
+                                            >
+                                                Edit
+                                            </Button>
+                                            <Button
+                                                onClick={() => {
+                                                    handleDelete(item.id);
+                                                }}
+                                                className="btn-sm btn-danger"
+                                                style={{ minWidth: "75px" }}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </td>
                                     </tr>
                                 )
                                 )}
@@ -81,6 +131,11 @@ function Product() {
                     )}
                 </div>
             </Container>
+            <DeleteData
+                setConfirmDelete={setConfirmDelete}
+                show={show}
+                handleClose={handleClose}
+            />
         </>
     )
 }

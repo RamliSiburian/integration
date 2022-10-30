@@ -31,6 +31,9 @@ func (h *handlerprofile) FindProfile(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 		return
 	}
+	for i, p := range user {
+		user[i].Image = os.Getenv("PATH_FILE_USERS") + p.Image
+	}
 
 	w.WriteHeader(http.StatusOK)
 	response := Dto.SuccessResult{Code: http.StatusOK, Data: user}

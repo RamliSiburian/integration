@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Alert, Button, Container, Form, InputGroup } from 'react-bootstrap';
 import GlobalForm from '../Components/Atoms/Global-form';
 import * as Icon from "react-icons/fa";
@@ -81,7 +81,7 @@ function EditProfile() {
                 setMessage(alert);
             }
             setPreview(null);
-            const timer = setTimeout(navigates, 2000);
+            const timer = setTimeout(navigates, 1000);
 
             function navigates() {
                 navigate(`/Profile/${id}`);
@@ -97,14 +97,15 @@ function EditProfile() {
     return (
         <>
             <Container>
-                <div className="Edit-profile mt-5">
+                <div className="Edit-profile mt-5 d-md-flex align-items-center">
+                    <p className="fs-5 fw-bold me-3"><Link to={`/Profile/${id}`} className="text-danger"><Icon.FaArrowLeft /> Back |</Link> </p>
                     {state.user.role === "Partner" ? (
                         <p className='fs-3 fw-bold'>Edit Profile Partner</p>
                     ) : (
                         <p className='fs-3 fw-bold'>Edit Profile</p>
                     )}
-                    <hr />
                 </div>
+                <hr />
                 {message && message}
                 <Form onSubmit={(e) => handleOnSubmit(e)}>
                     {preview && (

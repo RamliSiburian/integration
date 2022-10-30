@@ -11,6 +11,7 @@ type ProductRepository interface {
 	GetProduct(ID int) (Models.Product, error)
 	GetProductUser(UserID int) ([]Models.Product, error)
 	CreateProduct(product Models.Product) (Models.Product, error)
+	DeleteProduct(product Models.Product) (Models.Product, error)
 }
 
 func RepositoryProduct(db *gorm.DB) *users {
@@ -39,6 +40,12 @@ func (r *users) GetProduct(ID int) (Models.Product, error) {
 
 func (r *users) CreateProduct(product Models.Product) (Models.Product, error) {
 	err := r.db.Create(&product).Error
+
+	return product, err
+}
+
+func (r *users) DeleteProduct(product Models.Product) (Models.Product, error) {
+	err := r.db.Delete(&product).Error
 
 	return product, err
 }

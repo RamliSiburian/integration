@@ -119,14 +119,39 @@ func (h *handlerProduct) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func convertResponseProduct(u Models.Product) Models.ProductResponse {
-	return Models.ProductResponse{
-		ID:    u.ID,
-		Name:  u.Name,
-		Desc:  u.Desc,
-		Price: u.Price,
-		Image: u.Image,
-		Qty:   u.Qty,
-		User:  u.User,
+func (h *handlerProduct) DeleteProduct(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	id, _ := strconv.Atoi(mux.Vars(r)["id"])
+	product, err := h.ProductRepository.GetProduct(id)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		response := Dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+		return
 	}
+
+	deleteProduct, err := h.ProductRepository.DeleteProduct(product)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		response := Dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	response := Dto.SuccessResult{Code: http.StatusOK, Data: deleteProduct}
+	json.NewEncoder(w).Encode(response)
 }
+
+// func convertResponseProduct(u Models.Product) Models.ProductResponse {
+// 	return Models.ProductResponse{
+// 		ID:    u.ID,
+// 		Name:  u.Name,
+// 		Desc:  u.Desc,
+// 		Price: u.Price,
+// 		Image: u.Image,
+// 		Qty:   u.Qty,
+// 		User:  u.User,
+// 	}
+// }

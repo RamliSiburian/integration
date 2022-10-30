@@ -12,6 +12,8 @@ import AddProduk from './Pages/Add-produk';
 import ChartOrder from './Pages/Chart-order';
 import Incometransaction from './Components/Income-transaction';
 import { UserContext } from './context/User-context';
+import ListProduct from './Pages/List-product';
+import DetailProduct from './Pages/Detail-product';
 
 
 function App() {
@@ -48,9 +50,9 @@ function App() {
 
     return (
         <>
-            {isLoading ? <></> :
-                <Routes>
-                    <Route exact path='/' element={<Home />} />
+            <Routes>
+                <Route exact path='/' element={<Home />} />
+                {isLoading ? <></> :
                     <Route exact path='/' element={<PrivateRoute />}>
                         <Route exact path='/Admin' element={<Admin />} />
                         <Route exact path='/User' element={<User />} />
@@ -60,11 +62,13 @@ function App() {
                         <Route exact path='/Profile/:id' element={<Profile />} />
                         <Route exact path='/EditProfile/:id' element={<EditProfile />} />
                         <Route exact path='/AddProduct' element={<AddProduk />} />
+                        <Route exact path='/ListProduct' element={<ListProduct />} />
+                        <Route exact path='/DetailProduct/:user_id' element={<DetailProduct />} />
                         <Route exact path='/ChartOrder' element={<ChartOrder />} />
                         <Route exact path='/IncomeTransaction' element={<Incometransaction />} />
                     </Route>
-                </Routes>
-            }
+                }
+            </Routes>
         </>
     )
 }

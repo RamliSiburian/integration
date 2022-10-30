@@ -1,10 +1,10 @@
 import React from 'react'
-import Product from '../Components/Product';
+import Incometransaction from '../Components/Income-transaction';
 
 function Admin() {
     return (
         <>
-            <Product />
+            <Incometransaction />
         </>
     )
 }
